@@ -43,4 +43,4 @@
 19. navigate to: settings -> webhooks -> add webhooks
 (payload URL: ([jenkins URL]/github-webhook/) content type: application/json) -> save
 
-20. 
+20. If redeploy is desired in nexus: navigate to [repo] -> configure -> Deployment Policy: (allow redeploy)
