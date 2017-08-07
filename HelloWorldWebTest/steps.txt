@@ -1,0 +1,46 @@
+1. terraform apply
+
+2. log in to aws console ang get ip of ec2
+
+3. go to IP of jenkins(18080) and nexus(18081) and make sure they are running. 
+(if not use putty into ec2 box and start manually) (use: docker ps -a to get [container ID], then: docker start [container ID])
+
+4. in jenkins: manually install nexus-jenkins-plugin-1.1.0-05.hpi (in manage plug-in, advanced, upload-file(file is on github))
+
+5. stop rebuild of 2 seed-jobs (we don't have to, but they are annoying) (configure -> uncheck "build periodically" -> save)
+
+6. go to manage jenkins -> configure system -> Sonatype Nexus -> add nexus repository manager server
+(Display Name: (whatever we want) Server ID: (25) Server URL: ([IP address of Nexus]:18081) Credentials: (add new key: username: (admin) password: (admin123))
+
+7. Test connection to Nexus, and Apply/Save.
+
+8. Navigate to: Manage Jenkins -> Global Tool Configuration -> Maven Installiations.
+
+9. Change version to: (3.3.9) Change name to (Maven) Apply/Save
+
+10. Navigate to desired jobs -> configure -> Build -> Add build step
+
+11. Add: Invoke top-level Maven targets.
+(Maven Version: (Maven name you added in step 9.) Goal: (clean site install?)
+
+12. click advanced, then add path to .pom file (made by eclipse)
+
+13. in new browser tab: log into nexus: (username: admin password: admin123)
+
+14. in jenkins config: add another build step (nexus repository manager publisher)
+(nexus instance: (name in step .6) nexus repository: [choose desired repo])
+
+15. click add packages.
+(group: (org.jenkins-ci.main) artifact: [choose name] Version: [choose version #] Packaging: (war)
+
+16. click add artifact path. 
+(file path: path to /target that will be on ec2 box + [warname].war)
+
+17. apply/save
+
+18. in new tab: navigate to git repo for project
+
+19. navigate to: settings -> webhooks -> add webhooks
+(payload URL: ([jenkins URL]/github-webhook/) content type: application/json) -> save
+
+20. 
